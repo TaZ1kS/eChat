@@ -22,7 +22,6 @@ jobs:
 
       - name: Build iOS App
         run: |
-          # Заходимо в папку, де реально лежить .xcodeproj
           cd iosApp
           xcodebuild clean build \
           -project iosApp.xcodeproj \
@@ -33,3 +32,10 @@ jobs:
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_IDENTITY="" \
           PROVISIONING_PROFILE=""
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build-artifact
+          # Зазвичай білд лежить тут (шлях може відрізнятися залежно від налаштувань проєкту)
+          path: iosApp/build/Release-iphoneos/
