@@ -20,25 +20,15 @@ jobs:
       - name: Build Shared Kotlin
         run: ./gradlew :composeApp:assembleDebug
 
-      - name: Prepare iOS Dependencies
-        run: |
-          # Спробуємо зібрати проєкт через Gradle, щоб він згенерував необхідні файли для iOS
-          ./gradlew :iosApp:podInstall || echo "No podInstall task found, skipping..."
-        
       - name: Build iOS App
         run: |
-          cd iosApp
-          # Перевіримо, чи є Podfile після виконання Gradle
-          if [ -f "Podfile" ]; then
-            pod install
-            xcodebuild clean build \
-            -workspace iosApp.xcworkspace \
-            -scheme iosApp \
-            -configuration Release \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO
-          else
-            echo "Podfile still not found! Checking directory contents:"
-            ls -R
-            exit 1
-          fi
+          # Використовуємо .xcodeproj замість .xcworkspace, бо workspace немає
+          xcodebuild clean build \
+          -project iosApp.xcodeproj \
+          -scheme iosApp \
+          -destination 'generic/platform=iOS' \
+          -configuration Release \
+          CODE_SIGNING_ALLOWED=NO \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_IDENTITY="" \
+          PROVISIONING_PROFILE=""
