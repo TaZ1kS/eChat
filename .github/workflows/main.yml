@@ -22,7 +22,8 @@ jobs:
 
       - name: Build iOS App
         run: |
-          # Використовуємо .xcodeproj замість .xcworkspace, бо workspace немає
+          # Заходимо в папку, де реально лежить .xcodeproj
+          cd iosApp
           xcodebuild clean build \
           -project iosApp.xcodeproj \
           -scheme iosApp \
